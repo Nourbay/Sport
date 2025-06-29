@@ -1,0 +1,4 @@
+<ng-container *ngFor="let produit of nft; let i = index">
+  <!-- on affiche toutes les cartes, pas seulement i > 0 -->
+  <nft-single-card [produit]="produit"></nft-single-card>
+</ng-container>
