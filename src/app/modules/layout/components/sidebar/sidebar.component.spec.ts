@@ -2,9 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SidebarComponent } from './sidebar.component';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';  // <-- Ajout ici
 
 describe('SidebarComponent', () => {
   let component: SidebarComponent;
@@ -14,19 +12,10 @@ describe('SidebarComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         SidebarComponent,
+        AngularSvgIconModule.forRoot(),
         HttpClientTestingModule,
-        BrowserAnimationsModule,
-        AngularSvgIconModule.forRoot()
+        RouterTestingModule   // <-- Fournit ActivatedRoute et autres services du routeur
       ],
-      providers: [
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            params: of({}),
-            snapshot: { paramMap: { get: () => null } }
-          }
-        }
-      ]
     }).compileComponents();
   });
 

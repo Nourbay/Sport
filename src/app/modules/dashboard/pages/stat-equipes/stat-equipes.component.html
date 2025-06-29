@@ -1,0 +1,29 @@
+<div class="modal-backdrop">
+  <div class="modal-content">
+    <h2>📊 Statistiques du Match</h2>
+
+    <!-- Graphique Cartons -->
+    <h3>Cartons jaunes et rouges</h3>
+    <canvas #barCanvas></canvas>
+
+    <!-- Graphique Fautes -->
+    <h3>Fautes commises</h3>
+    <canvas #fautesCanvas></canvas>
+
+    <!-- Score global -->
+    <div class="score">
+      <p>
+        {{ getEquipesName(match?.idEquipe1) }}
+        {{ match?.scoreEquipe1 }} - {{ match?.scoreEquipe2 }}
+        {{ getEquipesName(match?.idEquipe2) }}
+      </p>
+    </div>
+
+    <button class="btn-close" (click)="onClose()">Fermer</button>
+  </div>
+</div>
+
+
+
+
+

@@ -1,8 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LayoutComponent } from './layout.component';
-import { AngularSvgIconModule } from 'angular-svg-icon'; // Fournit SvgIconRegistryService
+import { AngularSvgIconModule } from 'angular-svg-icon';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { provideRouter } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';  // <-- Import animations
 
 describe('LayoutComponent', () => {
   let component: LayoutComponent;
@@ -13,11 +14,10 @@ describe('LayoutComponent', () => {
       imports: [
         LayoutComponent,
         AngularSvgIconModule.forRoot(),
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        RouterTestingModule,
+        BrowserAnimationsModule  // <-- Ajout indispensable pour animations
       ],
-      providers: [
-        provideRouter([]) // configure routes vides, adapte si tu as des routes
-      ]
     }).compileComponents();
   });
 

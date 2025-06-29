@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import { TwoStepsComponent } from './two-steps.component';
 
 describe('TwoStepsComponent', () => {
@@ -7,8 +8,8 @@ describe('TwoStepsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TwoStepsComponent]
-    }).compileComponents();
+    imports: [TwoStepsComponent],
+}).compileComponents();
 
     fixture = TestBed.createComponent(TwoStepsComponent);
     component = fixture.componentInstance;

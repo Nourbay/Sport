@@ -1,0 +1,149 @@
+<div class="users-container">
+    <div class="users-card add-user-card">
+        <app-alert [message]="message" [type]="alertType" (closeAlert)="closeAlert()"></app-alert>
+
+        <div class="add-header">
+            <h2 style="color: black; font-size: 30px; padding: 10px;">➕ Ajouter une équipe</h2>
+
+            <button *ngIf="!showAddEquipe" (click)="toggleAddEquipe()" class="toggle-btn">➕ Nouvelle</button>
+            <button *ngIf="showAddEquipe" (click)="closeAddEquipe()" class="toggle-btn">✖️ Fermer</button>
+        </div>
+
+        <div *ngIf="showAddEquipe" class="add-user-form animated">
+            <form (ngSubmit)="onAddEquipe()" #addEquipeForm="ngForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nameEquipe">Nom de l'équipe</label>
+                        <input type="text" name="nameEquipe" [(ngModel)]="newEquipe.nameEquipe" required
+                            class="form-control" />
+                    </div>
+                </div>
+
+                <!-- <div class="form-group">
+                    <label for="logo">URL du drapeau / logo</label>
+                    <input type="text" name="logo" [(ngModel)]="newEquipe.logo" class="form-control"
+                        placeholder="https://..." />
+                </div> -->
+                <div class="form-group">
+                    <label for="logo">Logo (drapeau)</label>
+                    <input type="file" (change)="onFileChange($event)" accept="image/*">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-save">✔️ Valider</button>
+                    <button type="button" class="btn btn-cancel" (click)="cancelAddEquipe()">❌ Annuler</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Liste des équipes -->
+    <div class="match-card">
+
+        <div class="flex flex-row justify-between">
+            <h2 style="color: black; font-size: 30px; padding: 10px;margin-bottom: 10px;">📋 Liste des équipes</h2>
+            <div class="search-bar w-[220px] h-[45px] mt-3">
+                <input type="text" [(ngModel)]="searchEquipeTerm" placeholder="🔍 Rechercher une équipe..."
+                    class="form-control" />
+            </div>
+
+            <div *ngIf="errorMessage" class="error-message">
+                <p>{{ errorMessage }}</p>
+            </div>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th (click)="sortEquipesBy('name')" class="cursor-pointer">
+                        Nom <span>{{ getEquipeSortIcon('name') }}</span>
+                    </th>
+                    <th>Liste des joueurs</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let equipe of displayedEquipes">
+
+                    <tr>
+
+                        <td class="equipe-info">
+                            <div class="equipe-nom-image">
+                                <img *ngIf="equipe.logo" [src]="equipe.logo" alt="Logo" class="equipe-logo" />
+                                <div *ngIf="equipe.id && editMode[equipe.id]; else viewMode">
+                                    <input type="text" [(ngModel)]="editedEquipe[equipe.id].nameEquipe"
+                                        class="form-control" />
+                                </div>
+                                <ng-template #viewMode>{{ equipe.nameEquipe }}</ng-template>
+                            </div>
+                        </td>
+
+
+                        <!-- <td>
+                            <div *ngIf="equipe.id && editMode[equipe.id]; else viewMode">
+                                <input type="text" [(ngModel)]="editedEquipe[equipe.id].nameEquipe"
+                                    class="form-control" />
+                            </div>
+                            <ng-template #viewMode>{{ equipe.nameEquipe }}</ng-template>
+                        </td> -->
+
+                        <td>
+                            <button *ngIf="equipe.id" class="btn btn-info" (click)="toggleJoueurs(equipe.id)">👥 Voir
+                                les joueurs</button>
+                        </td>
+
+                        <td class="actions-col w-[240px]">
+                       <button *ngIf="equipe.id && !editMode[equipe.id]" class="btn btn-icon ml-1"
+                      (click)="editEquipe(equipe)"  title="modifier"> 
+                    <i class="fas fa-edit text-xl transition duration-200 text-yellow-600 hover:text-yellow-800"></i>
+                     </button>
+
+               <button *ngIf="equipe.id && editMode[equipe.id]" class="btn btn-save mr-1"
+             (click)="saveEquipe(equipe.id)">Enregistrer</button>
+
+             <button *ngIf="equipe.id && editMode[equipe.id]" class="btn btn-cancel"
+                (click)="cancelEdit(equipe.id)">Annuler</button>
+
+
+             <button *ngIf="equipe.id && !editMode[equipe.id]" class="btn btn-icon ml-1"
+              (click)="deleteEquipe(equipe.id)"  title="Supprimer" >
+                 <i class="fas fa-trash text-red-600 text-xl hover:text-red-800 transition duration-200"></i>
+              </button>
+               </td>
+
+               </tr>
+                    <tr *ngIf="equipe.id && usersVisible[equipe.id]">
+                        <td colspan="3">
+                            <ul *ngIf="usersParEquipe[equipe.id]; else loading">
+                                <li *ngFor="let user of usersParEquipe[equipe.id]">
+                                    {{ user.prenom }} {{ user.nom }} <!-- - {{ user.age }} -->
+                                </li>
+                            </ul>
+                            <ng-template #loading>
+                                <p>Chargement des joueurs...</p>
+                            </ng-template>
+                        </td>
+                    </tr>
+                </ng-container>
+            </tbody>
+
+
+
+        </table>
+        <div class="pagination-controls">
+            <button (click)="prevPage()" [disabled]="currentPage === 1" class="pagination-button">
+                ◀
+            </button>
+
+            <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+                <button (click)="goToPage(i + 1)" [class.active]="currentPage === i + 1" class="pagination-button">
+                    {{ i + 1 }}
+                </button>
+            </ng-container>
+
+            <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="pagination-button">
+                ▶
+            </button>
+        </div>
+
+    </div>
+</div>

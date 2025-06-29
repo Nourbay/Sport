@@ -1,17 +1,21 @@
-# Étape de build Angular
-FROM node:20-alpine AS builder
+# Étape 1 : Build Angular
+FROM node:18 as build-stage
 
 WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci
+
 COPY . .
+RUN npm run build -- --configuration production
 
-RUN npm install --legacy-peer-deps
-RUN npm run build -- --configuration=production
+# Étape 2 : Serveur Nginx
+FROM nginx:alpine
 
-# Étape de production avec NGINX
-FROM nginx:1.27-alpine
-
-COPY --from=builder /app/dist/angular-tailwind /usr/share/nginx/html
+COPY --from=build-stage /app/dist/angular-tailwind /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
+
 EXPOSE 80
+
 CMD ["nginx", "-g", "daemon off;"]

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PodcastCardBannerComponent } from './podcast-card-banner.component';
-import { AngularSvgIconModule } from 'angular-svg-icon'; // Importation du module AngularSvgIcon
-import { HttpClientTestingModule } from '@angular/common/http/testing'; // Requis pour SvgIconRegistryService
+import { AngularSvgIconModule } from 'angular-svg-icon';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('PodcastCardBannerComponent', () => {
   let component: PodcastCardBannerComponent;
@@ -10,12 +10,11 @@ describe('PodcastCardBannerComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        PodcastCardBannerComponent, // Le composant lui-même (s'il est standalone)
-        HttpClientTestingModule, // Nécessaire pour les services qui effectuent des requêtes HTTP (comme AngularSvgIcon)
-        AngularSvgIconModule.forRoot() // Importation du module SVG avec la configuration racine
+        PodcastCardBannerComponent,
+        AngularSvgIconModule.forRoot(),  // Fournit SvgIconRegistryService
+        HttpClientTestingModule           // Fournit HttpClient pour SvgIconRegistryService
       ]
-    })
-    .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(PodcastCardBannerComponent);
     component = fixture.componentInstance;

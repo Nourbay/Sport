@@ -1,0 +1,142 @@
+<!-- terrain.component.html -->
+<div class="users-container">
+  <!-- Carte d'ajout de terrain -->
+  <div class="users-card add-user-card">
+    <app-alert [message]="message" [type]="alertType" (closeAlert)="closeAlert()"></app-alert>
+
+    <div class="add-header">
+      <h2 style="color: black; font-size: 30px; padding: 10px;">➕ Ajouter un terrain</h2>
+      <button *ngIf="!showAddTerrain" (click)="toggleAddTerrain()" class="toggle-btn">➕ Nouveau</button>
+      <button *ngIf="showAddTerrain" (click)="closeAddTerrain()" class="toggle-btn">✖️ Fermer</button>
+    </div>
+
+    <div *ngIf="showAddTerrain" class="add-user-form animated">
+      <form (ngSubmit)="onAddTerrain()" #addTerrainForm="ngForm">
+        <div class="form-group">
+          <label for="name">Nom</label>
+          <input id="name" name="name" [(ngModel)]="newTerrain.name" required class="form-control" />
+        </div>
+        <div class="form-group">
+          <label for="adresse">Adresse</label>
+          <input id="adresse" name="adresse" [(ngModel)]="newTerrain.adresse" required class="form-control" />
+        </div>
+        <div class="form-group">
+          <label for="type">Type</label>
+          <input id="type" name="type" [(ngModel)]="newTerrain.type" required class="form-control" />
+        </div>
+
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-save">✔️ Valider</button>
+          <button type="button" class="btn btn-cancel" (click)="cancelAddTerrain()">❌ Annuler</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Liste des terrains -->
+  <div class="match-card">
+    <div class="flex flex-row justify-between">
+      <h2 style="color: black; font-size: 30px; padding: 10px; margin-bottom: 10px;">🏟️ Liste des terrains</h2>
+
+      <div class="search-bar w-[220px] h-[45px] mt-3">
+        <input type="text" [(ngModel)]="searchTerrainTerm" placeholder="🔍 Rechercher un terrain..."
+          class="form-control" />
+      </div>
+
+      <div *ngIf="errorMessage" class="error-message">
+        <p>{{ errorMessage }}</p>
+      </div>
+    </div>
+
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th (click)="sortTerrainBy('name')" class="cursor-pointer">
+            Nom <span>{{ getSortIcon('name') }}</span>
+          </th>
+
+          <th (click)="sortTerrainBy('adresse')" class="cursor-pointer">
+            Adresse
+            <span>
+              {{ getSortIcon('adresse') }}
+            </span>
+          </th>
+          <th (click)="sortTerrainBy('type')" class="cursor-pointer">
+            Type
+            <span>
+              {{ getSortIcon('type') }}
+            </span>
+          </th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+
+      <tbody>
+        <tr *ngFor="let terrain of filteredTerrains;">
+          <!-- Nom -->
+          <td>
+            <div *ngIf="editMode[terrain.id]; else nameView">
+              <input [(ngModel)]="editedTerrain[terrain.id].name" name="name-{{terrain.id}}" class="form-control" />
+            </div>
+            <ng-template #nameView>{{ terrain.name }}</ng-template>
+          </td>
+
+          <!-- Adresse -->
+          <td>
+            <div *ngIf="editMode[terrain.id]; else adresseView">
+              <input [(ngModel)]="editedTerrain[terrain.id].adresse" name="adresse-{{terrain.id}}"
+                class="form-control" />
+            </div>
+            <ng-template #adresseView>{{ terrain.adresse }}</ng-template>
+          </td>
+
+          <!-- Type -->
+          <td>
+            <div *ngIf="editMode[terrain.id]; else typeView">
+              <input [(ngModel)]="editedTerrain[terrain.id].type" name="type-{{terrain.id}}" class="form-control" />
+            </div>
+            <ng-template #typeView>{{ terrain.type }}</ng-template>
+          </td>
+
+          <!-- Actions -->
+          <td class="actions-col w-[240px]">
+            <button *ngIf="!editMode[terrain.id]" class="btn btn-icon ml-1"
+             (click)="editTerrain(terrain)"  title="modifier">
+              <i class="fas fa-edit text-xl transition duration-200 text-yellow-600 hover:text-yellow-800"></i>
+            </button>     
+
+            <button *ngIf="editMode[terrain.id]" class="btn btn-save mr-1"         
+              (click)="saveTerrain(terrain.id)">Enregistrer</button>
+
+              
+            <button *ngIf="!editMode[terrain.id]" class="btn btn-icon ml-1"
+               (click)="deleteMatch(terrain.id)"
+                title="Supprimer">
+             <i class="fas fa-trash text-red-600 text-xl hover:text-red-800 transition duration-200"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="pagination-controls">
+      <button (click)="prevPage()" [disabled]="currentPage === 1" class="pagination-button">
+        ◀
+      </button>
+
+      <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+        <button (click)="goToPage(i + 1)" [class.active]="currentPage === i + 1" class="pagination-button">
+          {{ i + 1 }}
+        </button>
+      </ng-container>
+
+      <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="pagination-button">
+        ▶
+      </button>
+    </div>
+
+  </div>
+</div>

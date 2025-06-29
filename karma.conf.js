@@ -1,6 +1,3 @@
-// Karma configuration file, see link for more information
-// https://karma-runner.github.io/1.0/config/configuration-file.html
-
 module.exports = function (config) {
   config.set({
     basePath: '',
@@ -14,12 +11,12 @@ module.exports = function (config) {
     ],
     client: {
       jasmine: {
-        // configuration options for Jasmine
+        // options Jasmine ici
       },
-      clearContext: false, // leave Jasmine Spec Runner output visible in browser
+      clearContext: false, // laisse la sortie visible dans le navigateur
     },
     jasmineHtmlReporter: {
-      suppressAll: true,
+      suppressAll: true, // supprime les traces dupliquées
     },
     coverageReporter: {
       dir: require('path').join(__dirname, './coverage/angular-tailwind'),
@@ -30,18 +27,20 @@ module.exports = function (config) {
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
-    autoWatch: true,
-
-    // 🔧 CI-compatible browser config
-    browsers: ['ChromeHeadlessNoSandbox'],
-    customLaunchers: {
-      ChromeHeadlessNoSandbox: {
-        base: 'ChromeHeadless',
-        flags: ['--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage']
-      }
-    },
-
-    singleRun: true,
+    autoWatch: false,          // false en CI pour ne pas rester à l’écoute
+    browsers: ['ChromeHeadlessCI'],  // utiliser le launcher custom (headless)
+    singleRun: true,           // true en CI pour lancer une seule fois
     restartOnFileChange: false,
+
+    customLaunchers: {
+      ChromeHeadlessCI: {
+        base: 'ChromeHeadless',
+        flags: [
+          '--no-sandbox',
+          '--disable-gpu',
+          '--disable-dev-shm-usage'
+        ],
+      },
+    },
   });
-};
+}

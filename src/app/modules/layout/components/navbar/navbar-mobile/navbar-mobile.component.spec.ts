@@ -1,41 +1,26 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
-import { NavbarMobileMenuComponent } from './navbar-mobile-menu/navbar-mobile-menu.component';
+import { NavbarMobileComponent } from '../navbar-mobile/navbar-mobilecomponent'; // Correction nom fichier
 import { AngularSvgIconModule } from 'angular-svg-icon';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';  // <-- Ajout important
 
-describe('NavbarMobileMenuComponent', () => {
-  let component: NavbarMobileMenuComponent;
-  let fixture: ComponentFixture<NavbarMobileMenuComponent>;
+describe('NavbarMobileComponent', () => {
+  let component: NavbarMobileComponent;
+  let fixture: ComponentFixture<NavbarMobileComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        NavbarMobileMenuComponent, // Composant standalone
+        NavbarMobileComponent,
+        AngularSvgIconModule.forRoot(),
         HttpClientTestingModule,
-        BrowserAnimationsModule,
-        AngularSvgIconModule.forRoot() // Fournit SvgIconRegistryService et SvgLoader
+        RouterTestingModule,   // <-- Fournit ActivatedRoute
       ],
-      providers: [
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            params: of({}),
-            snapshot: {
-              paramMap: {
-                get: (key: string) => null
-              }
-            }
-          }
-        }
-      ]
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NavbarMobileMenuComponent);
+    fixture = TestBed.createComponent(NavbarMobileComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
