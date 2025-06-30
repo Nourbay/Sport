@@ -107,19 +107,19 @@ jobs:
 
       # Nexus Docker Registry login and push
       - name: Login to Nexus Docker Registry
-        run: echo "${{ secrets.NEXUS_PASSWORD }}" | docker login  https://2747-196-234-9-161.ngrok-free.app -u ${{ secrets.NEXUS_USERNAME }} --password-stdin
+        run: echo "${{ secrets.NEXUS_PASSWORD }}" | docker login   https://c859-2c0f-f698-40c5-49b2-795c-f84c-dcdb-f7a4.ngrok-free.app -u ${{ secrets.NEXUS_USERNAME }} --password-stdin
 
       - name: Build Docker image with tags
         run: |
           docker build \
-            -t 2747-196-234-9-161.ngrok-free.app/devopsfront:${IMAGE_TAG} \
-            -t 2747-196-234-9-161.ngrok-free.app/devopsfront:latest \
+            -t c859-2c0f-f698-40c5-49b2-795c-f84c-dcdb-f7a4.ngrok-free.app/devopsfront:${IMAGE_TAG} \
+            -t c859-2c0f-f698-40c5-49b2-795c-f84c-dcdb-f7a4.ngrok-free.app/devopsfront:latest \
             .
 
       - name: Push Docker images to Nexus
         run: |
-          docker push 2747-196-234-9-161.ngrok-free.app/devopsfront:${IMAGE_TAG}
-          docker push 2747-196-234-9-161.ngrok-free.app/devopsfront:latest
+          docker push c859-2c0f-f698-40c5-49b2-795c-f84c-dcdb-f7a4.ngrok-free.app/devopsfront:${IMAGE_TAG}
+          docker push c859-2c0f-f698-40c5-49b2-795c-f84c-dcdb-f7a4.ngrok-free.app/devopsfront:latest
 
       # Docker Hub login and push
       - name: Log in to Docker Hub
@@ -127,8 +127,8 @@ jobs:
 
       - name: Tag image for Docker Hub
         run: |
-          docker tag 2747-196-234-9-161.ngrok-free.app/devopsfront:${IMAGE_TAG} ${{ secrets.DOCKER_USERNAME }}/devopsfront:${IMAGE_TAG}
-          docker tag 2747-196-234-9-161.ngrok-free.app/devopsfront:latest ${{ secrets.DOCKER_USERNAME }}/devopsfront:latest
+          docker tag c859-2c0f-f698-40c5-49b2-795c-f84c-dcdb-f7a4.ngrok-free.app/devopsfront:${IMAGE_TAG} ${{ secrets.DOCKER_USERNAME }}/devopsfront:${IMAGE_TAG}
+          docker tag c859-2c0f-f698-40c5-49b2-795c-f84c-dcdb-f7a4.ngrok-free.app/devopsfront:latest ${{ secrets.DOCKER_USERNAME }}/devopsfront:latest
 
       - name: Push images to Docker Hub
         run: |
